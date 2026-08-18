@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ชลบุรี - สีสันแห่งตะวันออก</title>
+    
+    <!-- โหลด Tailwind CSS ผ่าน CDN สำหรับ Styling แบบรวดเร็วและ Responsive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- โหลด Font Niramit สำหรับภาษาไทยให้ดูทันสมัย -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Niramit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- โหลด FontAwesome สำหรับ Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* กำหนด Theme สีหลักที่เข้ากับทะเลชลบุรี (น้ำเงิน-ฟ้า-ทราย) */
+        :root {
+            --primary-blue: #0A2647;
+            --secondary-blue: #144272;
+            --ocean-blue: #205295;
+            --sand-color: #F8F1F1;
+        }
+
+        body {
+            font-family: 'Niramit', sans-serif;
+            background-color: var(--sand-color);
+            color: #333;
+            overflow-x: hidden;
+            scroll-behavior: smooth; /* Smooth scrolling เมื่อคลิก Anchor link */
+        }
+
+        /* -------------------------------------------
+           Hero Section Styles 
+        ------------------------------------------- */
+        .hero-section {
+            /* ใช้รูปภาพบรรยากาศทะเลชลบุรีจาก Unsplash */
+            background-image: linear-gradient(rgba(10, 38, 71, 0.4), rgba(10, 38, 71, 0.7)), url('https://images.unsplash.com/photo-1542475080-60b776269eb4?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Parallax effect เบาๆ */
+        }
+
+        /* -------------------------------------------
+           Custom Animations 
+        ------------------------------------------- */
+        
+        /* 1. Hero Text Entry Animation (Fade-in & Slide-up) */
+        .hero-animate-up {
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        /* หน่วงเวลาให้องค์ประกอบถัดไปค่อยๆ ปรากฏ (Staggered effect) */
+        .delay-1 { animation-delay: 0.3s; }
+        .delay-2 { animation-delay: 0.6s; }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 2. Scroll Reveal Animation (ใช้ร่วมกับ Intersection Observer ใน JS) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 3. Card Hover Effects */
+        .attraction-card {
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            overflow: hidden;
+            border-radius: 1rem;
+        }
+
+        .attraction-card:hover {
+            transform: translateY(-10px); /* Card ลอยขึ้น */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* Soft Drop-shadow */
+        }
+
+        .card-img-wrapper {
+            overflow: hidden;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+        }
+
+        .card-img {
+            transition: transform 0.6s ease;
+        }
+
+        .attraction-card:hover .card-img {
+            transform: scale(1.08); /* Zoom-in รูปภาพเล็กน้อยเมื่อ hover */
+        }
+
+        /* -------------------------------------------
+           Utilities 
+        ------------------------------------------- */
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, #60A5FA, #E0F2FE);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, var(--ocean-blue), #2C74B3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 0 15px rgba(44, 116, 179, 0.5);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HERO SECTION -->
+    <header class="hero-section h-screen w-full flex items-center justify-center text-center relative px-4">
+        
+        <!-- Navigation Bar (โปร่งใส) -->
+        <nav class="absolute top-0 w-full p-6 flex justify-between items-center z-10 hero-animate-up">
+            <div class="text-white font-bold text-2xl tracking-wider uppercase">Chonburi.</div>
+            <div class="hidden md:flex space-x-6 text-white/80">
+                <a href="#home" class="hover:text-white transition">หน้าแรก</a>
+                <a href="#attractions" class="hover:text-white transition">สถานที่ท่องเที่ยว</a>
+                <a href="#contact" class="hover:text-white transition">ติดต่อเรา</a>
+            </div>
+            <!-- Mobile Menu Icon (Visual only for this static layout) -->
+            <button class="md:hidden text-white text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+
+        <!-- Hero Content -->
+        <div class="z-10 max-w-4xl mx-auto flex flex-col items-center">
+            <span class="text-blue-300 font-medium tracking-[0.2em] mb-4 uppercase hero-animate-up text-sm md:text-base">Amazing Thailand</span>
+            
+            <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight hero-animate-up delay-1">
+                ค้นพบเสน่ห์แห่ง <br> <span class="text-gradient">จังหวัดชลบุรี</span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-gray-200 mb-10 max-w-2xl hero-animate-up delay-1 font-light">
+                สัมผัสความงดงามของทะเลตะวันออก เมืองท่าที่คึกคัก วัฒนธรรมที่หลากหลาย และสถานที่ท่องเที่ยวที่รอให้คุณมาสัมผัส
+            </p>
+            
+            <a href="#attractions" class="btn-primary text-white px-8 py-4 rounded-full font-semibold text-lg flex items-center gap-2 hero-animate-up delay-2 shadow-lg cursor-pointer">
+                ออกเดินทางกันเลย
+                <i class="fas fa-arrow-down animate-bounce ml-2"></i>
+            </a>
+        </div>
+        
+        <!-- แถบคลื่นตกแต่งด้านล่าง (SVG Wave) -->
+        <div class="absolute bottom-0 w-full overflow-hidden leading-[0]">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-[60px] md:h-[100px]">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118,130.98,130.22,201.76,121.72,243.6,116.63,284.14,103.55,321.39,56.44Z" fill="#F8F1F1"></path>
+            </svg>
+        </div>
+    </header>
+
+    <!-- FEATURED ATTRACTIONS SECTION -->
+    <section id="attractions" class="py-24 px-4 md:px-12 bg-[#F8F1F1]">
+        <div class="max-w-7xl mx-auto">
+            
+            <!-- Section Header (ใช้คลาส reveal เพื่อทำ Scroll Animation) -->
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-sm font-bold text-[#205295] tracking-widest uppercase mb-2">Destinations</h2>
+                <h3 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">จุดหมายปลายทางยอดฮิต</h3>
+                <div class="h-1 w-24 bg-[#205295] mx-auto rounded"></div>
+            </div>
+
+            <!-- Grid สำหรับ Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Card 1: พัทยา -->
+                <div class="attraction-card bg-white reveal">
+                    <div class="card-img-wrapper h-60 w-full relative">
+                        <img src="https://images.unsplash.com/photo-1628172944368-809460597ffc?q=80&w=2070&auto=format&fit=crop" alt="Pattaya Beach" class="card-img w-full h-full object-cover">
+                        <div class="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-full text-xs font-bold text-[#144272] backdrop-blur-sm shadow">
+                            เมืองพัทยา
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">ชายหาดพัทยา</h4>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                            เมืองท่องเที่ยวระดับโลกที่ไม่เคยหลับใหล สนุกสนานไปกับกิจกรรมทางน้ำ แสงสีเสียงยามค่ำคืน และอาหารทะเลสดใหม่ริมหาด
+                        </p>
+                        <a href="#" class="text-[#205295] font-semibold text-sm flex items-center hover:text-blue-500 transition-colors">
+                            อ่านเพิ่มเติม <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 2: ปราสาทสัจธรรม -->
+                <div class="attraction-card bg-white reveal delay-1">
+                    <div class="card-img-wrapper h-60 w-full relative">
+                        <img src="https://images.unsplash.com/photo-1627993096695-885ec77ed8b5?q=80&w=2070&auto=format&fit=crop" alt="Sanctuary of Truth" class="card-img w-full h-full object-cover">
+                        <div class="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-full text-xs font-bold text-[#144272] backdrop-blur-sm shadow">
+                            บางละมุง
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">ปราสาทสัจธรรม</h4>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                            สถาปัตยกรรมไม้แกะสลักที่ใหญ่ที่สุดในโลก สะท้อนปรัชญาและศิลปวัฒนธรรมอันวิจิตรบรรจง ตั้งตระหง่านริมทะเล
+                        </p>
+                        <a href="#" class="text-[#205295] font-semibold text-sm flex items-center hover:text-blue-500 transition-colors">
+                            อ่านเพิ่มเติม <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 3: เกาะล้าน -->
+                <div class="attraction-card bg-white reveal delay-2">
+                    <div class="card-img-wrapper h-60 w-full relative">
+                        <img src="https://images.unsplash.com/photo-1583090623377-52646274719c?q=80&w=2072&auto=format&fit=crop" alt="Koh Larn" class="card-img w-full h-full object-cover">
+                        <div class="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-full text-xs font-bold text-[#144272] backdrop-blur-sm shadow">
+                            เกาะล้าน
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">เกาะล้าน</h4>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                            สวรรค์ใกล้กรุง น้ำทะเลใส หาดทรายขาวละเอียด เดินทางเพียงไม่กี่นาทีจากฝั่งพัทยา เหมาะสำหรับการพักผ่อนตากอากาศ
+                        </p>
+                        <a href="#" class="text-[#205295] font-semibold text-sm flex items-center hover:text-blue-500 transition-colors">
+                            อ่านเพิ่มเติม <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Card 4: สวนนงนุช -->
+                <div class="attraction-card bg-white reveal">
+                    <div class="card-img-wrapper h-60 w-full relative">
+                        <img src="https://images.unsplash.com/photo-1626015525542-a89e4ec3c2e6?q=80&w=1968&auto=format&fit=crop" alt="Nong Nooch Botanical Garden" class="card-img w-full h-full object-cover">
+                        <div class="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-full text-xs font-bold text-[#144272] backdrop-blur-sm shadow">
+                            สัตหีบ
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">สวนนงนุช</h4>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                            สวนพฤกษศาสตร์ระดับโลกที่รวบรวมพันธุ์ไม้นานาชนิด การแสดงศิลปวัฒนธรรมไทย และสวนหุบเขาไดโนเสาร์สุดอลังการ
+                        </p>
+                        <a href="#" class="text-[#205295] font-semibold text-sm flex items-center hover:text-blue-500 transition-colors">
+                            อ่านเพิ่มเติม <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 5: เขาสามมุข -->
+                <div class="attraction-card bg-white reveal delay-1">
+                    <div class="card-img-wrapper h-60 w-full relative">
+                        <img src="https://images.unsplash.com/photo-1550570347-1563f4585f95?q=80&w=2070&auto=format&fit=crop" alt="Khao Sam Muk Viewpoint" class="card-img w-full h-full object-cover">
+                        <div class="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-full text-xs font-bold text-[#144272] backdrop-blur-sm shadow">
+                            บางแสน
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">จุดชมวิวเขาสามมุข</h4>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                            จุดชมวิวพระอาทิตย์ตกที่สวยงามที่สุดแห่งหนึ่งในชลบุรี มองเห็นวิวทะเลบางแสนและอ่างศิลา พร้อมคาเฟ่ชิคๆ ถ่ายรูปสวย
+                        </p>
+                        <a href="#" class="text-[#205295] font-semibold text-sm flex items-center hover:text-blue-500 transition-colors">
+                            อ่านเพิ่มเติม <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 6: อ่างเก็บน้ำบางพระ -->
+                <div class="attraction-card bg-white reveal delay-2">
+                    <div class="card-img-wrapper h-60 w-full relative">
+                        <img src="https://images.unsplash.com/photo-1548480398-3486dfb1e9da?q=80&w=2070&auto=format&fit=crop" alt="Bang Phra Reservoir" class="card-img w-full h-full object-cover">
+                        <div class="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-full text-xs font-bold text-[#144272] backdrop-blur-sm shadow">
+                            ศรีราชา
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">อ่างเก็บน้ำบางพระ</h4>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                            เส้นทางปั่นจักรยานและจุดชมวิวดอกตะแบกบานสะพรั่งในช่วงหน้าแล้ง บรรยากาศเงียบสงบ เหมาะแก่การพักผ่อนหย่อนใจ
+                        </p>
+                        <a href="#" class="text-[#205295] font-semibold text-sm flex items-center hover:text-blue-500 transition-colors">
+                            อ่านเพิ่มเติม <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contact" class="bg-[#0A2647] text-white pt-16 pb-8 px-4 text-center border-t-4 border-[#205295]">
+        <div class="max-w-4xl mx-auto flex flex-col items-center">
+            <h2 class="text-2xl font-bold mb-4 uppercase tracking-wider">Chonburi Tourism</h2>
+            <p class="text-gray-400 text-sm mb-8 max-w-md mx-auto">
+                ร่วมสัมผัสประสบการณ์การท่องเที่ยวที่ไม่เหมือนใครในจังหวัดชลบุรี เมืองแห่งสีสันตะวันออก
+            </p>
+            
+            <!-- Social Media Icons -->
+            <div class="flex space-x-6 mb-10">
+                <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 hover:-translate-y-1 transition-all duration-300">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 hover:-translate-y-1 transition-all duration-300">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 hover:-translate-y-1 transition-all duration-300">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 hover:-translate-y-1 transition-all duration-300">
+                    <i class="fab fa-youtube"></i>
+                </a>
+            </div>
+            
+            <div class="w-full border-t border-white/10 pt-8 mt-4 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
+                <p>&copy; 2026 Chonburi Tourism. All rights reserved.</p>
+                <div class="mt-4 md:mt-0 space-x-4">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            /**
+             * 1. Scroll Reveal Animation Logic
+             * ใช้วิธี Intersection Observer API: 
+             * เมื่อ element ที่มี class 'reveal' เลื่อนเข้ามาใน viewport (หน้าจอที่มองเห็น)
+             * จะทำการเติม class 'active' ให้กับ element นั้น เพื่อกระตุ้น CSS Transition ให้แสดงผล (Fade-in & Slide-up)
+             */
+            
+            // ค้นหาทุก element ที่ต้องการทำแอนิเมชันตอนเลื่อนจอ
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            // การตั้งค่าสำหรับ Observer
+            const revealOptions = {
+                threshold: 0.15, // ให้เริ่มทำงานเมื่อส่วนของ element ปรากฏขึ้นมา 15% ของความสูงมันเอง
+                rootMargin: "0px 0px -50px 0px" // ให้ trigger ก่อนที่จะเลื่อนมาถึงเล็กน้อย
+            };
+
+            // สร้าง Observer
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    // หาก element นั้นเข้ามาในจอแล้ว
+                    if (entry.isIntersecting) {
+                        // เพิ่ม class 'active' เพื่อเล่นแอนิเมชัน
+                        entry.target.classList.add('active');
+                        // เมื่อเล่นเสร็จแล้ว ให้หยุดสังเกตการณ์ element นี้เพื่อประหยัดทรัพยากร
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, revealOptions);
+
+            // นำ Observer ไปผูกกับทุก element ที่หาเจอ
+            revealElements.forEach(el => {
+                revealOnScroll.observe(el);
+            });
+
+            /**
+             * 2. Smooth Scrolling Logic (เสริมเพิ่มเติมเผื่อ CSS scroll-behavior ทำงานไม่สมบูรณ์ในบางเบราว์เซอร์)
+             * ทำให้ปุ่มลิงก์ที่เป็น Anchor (เช่น href="#attractions") เลื่อนไปหาเป้าหมายแบบนุ่มนวล
+             */
+            const smoothScrollLinks = document.querySelectorAll('a[href^="#"]');
+            
+            smoothScrollLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('href');
+                    // ป้องกันพฤติกรรมกดแล้วกระตุกทันที
+                    
+                    if (targetId === '#') return; // ข้ามลิงก์ว่าง
+
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        e.preventDefault();
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
